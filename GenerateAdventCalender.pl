@@ -1,5 +1,37 @@
 #!/usr/bin/perl -w
-=head1 NAME
+
+use strict;
+use warnings;
+use CGI;
+use Tie::Handle::CSV;
+
+my $AdventIndexFile = "index.html";
+my $DestinationDir = "./advent";
+
+sub BuildAdventIndex
+{
+	
+}
+
+sub BuildIndividualAdvents
+{
+
+}
+
+sub ReadInSiteConfig
+{
+
+}
+
+sub ReadInAdventConfigs
+{
+
+}
+
+
+
+
+=head1 GenerateAdventCalender.pl
 
 Generate an advent calender page which has links to sub pages which contain images and text.
 
@@ -28,3 +60,5 @@ the same terms as Perl itself. See L<perlartistic>.  This program is
 distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.
+
+
