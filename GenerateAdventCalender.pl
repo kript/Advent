@@ -4,9 +4,20 @@ use strict;
 use warnings;
 use CGI;
 use Tie::Handle::CSV;
+use Getopt::Std;
+use Pod::Usage;
+
 
 my $AdventIndexFile = "index.html";
 my $DestinationDir = "./advent";
+
+getopts( 'i:hf:l:m:u:', \my %opt );    # parse user input
+pod2usage(1) if ( defined $opt{h} );
+
+sub Usage
+{
+
+}
 
 sub BuildAdventIndex
 {
@@ -41,6 +52,7 @@ Generate an advent calender page which has links to sub pages which contain imag
 
 =head1 SYNOPSIS
 
+-h displays this page
 
 =head1 BUGS AND LIMITATIONS
 
