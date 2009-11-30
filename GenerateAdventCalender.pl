@@ -10,13 +10,45 @@ use Pod::Usage;
 
 my $AdventIndexFile = "index.html";
 my $DestinationDir = "./advent";
+my $SiteConfigFile = "site.csv";
+my $DaysConfigFile = "days.csv";
 
+#process the command line options
 getopts( 'i:hf:l:m:u:', \my %opt );    # parse user input
 pod2usage(1) if ( defined $opt{h} );
 
-sub Usage
+
+sub ReadInSiteConfig
+{
+	my %Site;
+ 	my $csv_fh = Tie::Handle::CSV->new($SiteConfigFile, header => 1) 
+		or die "Cannot open $SiteConfigFile: $!\n";
+
+   	while (my $csv_line = <$csv_fh>)
+      	{
+      		$Site{'title'} = $csv_line->{'title'} ;
+      		$Site{'titlefontcolour'} = $csv_line->{'titlefontcolour'} ;
+      		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
+      	}
+   	close $csv_fh;
+	return (%Site);
+}
+
+sub ReadInAdventConfigs
 {
 
+	my %Site;
+ 	my $csv_fh = Tie::Handle::CSV->new($SiteConfigFile, header => 1) 
+		or die "Cannot open $SiteConfigFile: $!\n";
+
+   	while (my $csv_line = <$csv_fh>)
+      	{
+      		$Site{'title'} = $csv_line->{'title'} ;
+      		$Site{'titlefontcolour'} = $csv_line->{'titlefontcolour'} ;
+      		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
+      	}
+   	close $csv_fh;
+	return (%Site);
 }
 
 sub BuildAdventIndex
@@ -25,16 +57,6 @@ sub BuildAdventIndex
 }
 
 sub BuildIndividualAdvents
-{
-
-}
-
-sub ReadInSiteConfig
-{
-
-}
-
-sub ReadInAdventConfigs
 {
 
 }
