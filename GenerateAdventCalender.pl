@@ -6,6 +6,7 @@ use CGI;
 use Tie::Handle::CSV;
 use Getopt::Std;
 use Pod::Usage;
+use Data::Dumper;
 
 
 my $AdventIndexFile = "index.html";
@@ -31,24 +32,32 @@ sub ReadInSiteConfig
       		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
       	}
    	close $csv_fh;
-	return (%Site);
+	
+	print Data::Dumper->Dump(%Site);
+
+	return (\%Site);
 }
 
 sub ReadInAdventConfigs
 {
 
-	my %Site;
- 	my $csv_fh = Tie::Handle::CSV->new($SiteConfigFile, header => 1) 
-		or die "Cannot open $SiteConfigFile: $!\n";
+	my @Advent;
+ 	my $csv_fh = Tie::Handle::CSV->new($DaysConfigFile, header => 1) 
+		or die "Cannot open $DaysConfigFile: $!\n";
 
+	my $DayCount = 0;
    	while (my $csv_line = <$csv_fh>)
       	{
-      		$Site{'title'} = $csv_line->{'title'} ;
-      		$Site{'titlefontcolour'} = $csv_line->{'titlefontcolour'} ;
-      		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
+      		$Advent->[$DayCount]->{'day'} = $csv_line->{'day'} ;
+      		$Advent->[$DayCount]->{'left'} = $csv_line->{'left'} ;
+      		$Advent->[$DayCount]->{'top'} = $csv_line->{'top'} ;
+      		$Advent->[$DayCount]->{'alt'} = $csv_line->{'alt'} ;
+      		$Advent->[$DayCount]->{'dayimagefile'} = $csv_line->{'dayimagefile'} ;
+		$DayCount++;
       	}
    	close $csv_fh;
-	return (%Site);
+	print Data::Dumper->Dump(@Advent);
+	return (@Advent);
 }
 
 sub BuildAdventIndex
@@ -61,6 +70,8 @@ sub BuildIndividualAdvents
 
 }
 
+ReadInAdventConfigs();
+ReadInSiteConfig();
 
 
 
