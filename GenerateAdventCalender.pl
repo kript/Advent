@@ -33,7 +33,7 @@ sub ReadInSiteConfig
       	}
    	close $csv_fh;
 	
-	print Data::Dumper->Dump(%Site);
+	print Dumper(%Site);
 
 	return (\%Site);
 }
@@ -46,17 +46,18 @@ sub ReadInAdventConfigs
 		or die "Cannot open $DaysConfigFile: $!\n";
 
 	my $DayCount = 0;
+
    	while (my $csv_line = <$csv_fh>)
       	{
-      		$Advent->[$DayCount]->{'day'} = $csv_line->{'day'} ;
-      		$Advent->[$DayCount]->{'left'} = $csv_line->{'left'} ;
-      		$Advent->[$DayCount]->{'top'} = $csv_line->{'top'} ;
-      		$Advent->[$DayCount]->{'alt'} = $csv_line->{'alt'} ;
-      		$Advent->[$DayCount]->{'dayimagefile'} = $csv_line->{'dayimagefile'} ;
+      		$Advent[$DayCount]{'day'} = $csv_line->{'day'} ;
+      		$Advent[$DayCount]{'left'} = $csv_line->{'left'} ;
+      		$Advent[$DayCount]{'top'} = $csv_line->{'top'} ;
+      		$Advent[$DayCount]{'alt'} = $csv_line->{'alt'} ;
+      		$Advent[$DayCount]{'dayimagefile'} = $csv_line->{'dayimagefile'} ;
 		$DayCount++;
       	}
    	close $csv_fh;
-	print Data::Dumper->Dump(@Advent);
+	print Dumper(@Advent);
 	return (@Advent);
 }
 
