@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use CGI;
+use CGI ':standard';
 use Tie::Handle::CSV;
 use Getopt::Std;
 use Pod::Usage;
@@ -13,6 +13,7 @@ my $AdventIndexFile = "index.html";
 my $DestinationDir = "./advent";
 my $SiteConfigFile = "site.csv";
 my $DaysConfigFile = "days.csv";
+my $dir = "advent";
 
 #process the command line options
 getopts( 'i:hf:l:m:u:', \my %opt );    # parse user input
@@ -54,6 +55,7 @@ sub ReadInAdventConfigs
       		$Advent[$DayCount]{'top'} = $csv_line->{'top'} ;
       		$Advent[$DayCount]{'alt'} = $csv_line->{'alt'} ;
       		$Advent[$DayCount]{'dayimagefile'} = $csv_line->{'dayimagefile'} ;
+      		$Advent[$DayCount]{'daytextfile'} = $csv_line->{'daytextfile'} ;
 		$DayCount++;
       	}
    	close $csv_fh;
@@ -63,7 +65,21 @@ sub ReadInAdventConfigs
 
 sub BuildAdventIndex
 {
-	
+
+	my $AdventIndexFile = shift;
+	my $Site = shift;
+
+	open (ADVENTINDEX,">$AdventIndexFile") or 
+		die "unable to write to file $AdventIndexFile: $!";
+
+	print ADVENTINDEX header;
+        print ADVENTINDEX start_html($$Site{'title'});
+        print ADVENTINDEX h1($$Site{'title'});
+	print img {src=>$$Site{'imagefile'},align=>'CENTER'};
+	print ADVENTINDEX end_html; 
+
+	close ADVENTINDEX 
+		or die "cannot close $AdventIndexFile: $!";
 }
 
 sub BuildIndividualAdvents
@@ -71,8 +87,17 @@ sub BuildIndividualAdvents
 
 }
 
-ReadInAdventConfigs();
-ReadInSiteConfig();
+#####main program control starts here
+
+my @Advents = ReadInAdventConfigs();
+my $Site = ReadInSiteConfig(); #this actually returns a reference to a hash
+
+mkdir($dir) or die "cannot create $dir: $!";
+chdir($dir);
+
+BuildAdventIndex($AdventIndexFile,$Site);
+
+
 
 
 
@@ -95,19 +120,19 @@ Script to Generate an advent calender page which has links to sub pages which co
 Takes two files; site.csv and days.csv with the following format;
 
 site.csv
-========
+
 title,titlefontcolour,imagefile
 
 e.g.
 Advent calender,#ffffff,/advent2009/advent.png
 
 days.csv
-========
-day,left,top,alt,dayimagefile
+
+day,left,top,alt,dayimagefile,daytextfile
 
 e.g.
 
-1,580,430,drummers busking,/advent2009/1.png
+1,580,430,drummers busking,/advent2009/1.png,/advent2009/1.txt
 
 note that the file locations are relative to the site - the script will create a advent subdir in the directory its run under, and create all the files there.  This then can be copied to a web directory of the same name eg.
 
