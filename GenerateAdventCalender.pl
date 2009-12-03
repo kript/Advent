@@ -69,13 +69,13 @@ sub BuildAdventIndex
 	my $AdventIndexFile = shift;
 	my $Site = shift;
 
-	open (ADVENTINDEX,">$AdventIndexFile") or 
+	open (ADVENTINDEX,"+>$AdventIndexFile") or 
 		die "unable to write to file $AdventIndexFile: $!";
 
 	print ADVENTINDEX header;
         print ADVENTINDEX start_html($$Site{'title'});
         print ADVENTINDEX h1($$Site{'title'});
-	print img {src=>$$Site{'imagefile'},align=>'CENTER'};
+	print ADVENTINDEX img {src=>$$Site{'imagefile'},align=>'CENTER'};
 	print ADVENTINDEX end_html; 
 
 	close ADVENTINDEX 
@@ -141,6 +141,7 @@ creates /home/john/code/advent/advent
 the content of which is then copies to advent2009/ on the webserver.
 
 this could be better, but.. 
+
 =head1 BUGS AND LIMITATIONS
 
 There are no known bugs in this script.
