@@ -30,11 +30,12 @@ sub ReadInSiteConfig
       	{
       		$Site{'title'} = $csv_line->{'title'} ;
       		$Site{'titlefontcolour'} = $csv_line->{'titlefontcolour'} ;
+      		$Site{'background'} = $csv_line->{'background'} ;
       		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
       	}
    	close $csv_fh;
 	
-	print Dumper(%Site);
+#	print Dumper(%Site);
 
 	return (\%Site);
 }
@@ -59,7 +60,7 @@ sub ReadInAdventConfigs
 		$DayCount++;
       	}
    	close $csv_fh;
-	print Dumper(@Advent);
+#	print Dumper(@Advent);
 	return (@Advent);
 }
 
@@ -68,14 +69,29 @@ sub BuildAdventIndex
 
 	my $AdventIndexFile = shift;
 	my $Site = shift;
+# 	print Dumper($Site);
+	my @Advent = shift;
 
 	open (ADVENTINDEX,"+>$AdventIndexFile") or 
 		die "unable to write to file $AdventIndexFile: $!";
 
-	print ADVENTINDEX header;
-        print ADVENTINDEX start_html($$Site{'title'});
-        print ADVENTINDEX h1($$Site{'title'});
-	print ADVENTINDEX img {src=>$$Site{'imagefile'},align=>'CENTER'};
+	#print ADVENTINDEX header;
+        print ADVENTINDEX start_html(-title=>"$$Site->{'title'}",
+		-BGCOLOR=>"$$Site->{'background'}");
+        print ADVENTINDEX h1({color=>"$$Site->{'titlefontcolour'}" },"$$Site->{'title'}");
+	print ADVENTINDEX img {src=>$$Site->{'imagefile'},align=>'CENTER',
+		height=>'684', width=>"912"};
+
+	my $count;
+	for my $day (@Advent)
+	{
+		$count++;
+		print ADVENTINDEX br();
+		   print ADVENTINDEX a({-href=>"$count.html", 
+			-style=>"left: 580px; top: 430px; z-index:9"}, "$count");
+
+	}
+
 	print ADVENTINDEX end_html; 
 
 	close ADVENTINDEX 
@@ -92,10 +108,12 @@ sub BuildIndividualAdvents
 my @Advents = ReadInAdventConfigs();
 my $Site = ReadInSiteConfig(); #this actually returns a reference to a hash
 
-mkdir($dir) or die "cannot create $dir: $!";
+#print Dumper(@Advents);
+
+unless (-d $dir) { mkdir($dir) or die "cannot create $dir: $!"; }
 chdir($dir);
 
-BuildAdventIndex($AdventIndexFile,$Site);
+BuildAdventIndex($AdventIndexFile,\$Site,@Advents);
 
 
 
@@ -121,7 +139,7 @@ Takes two files; site.csv and days.csv with the following format;
 
 site.csv
 
-title,titlefontcolour,imagefile
+title,titlefontcolour,background,imagefile
 
 e.g.
 Advent calender,#ffffff,/advent2009/advent.png
