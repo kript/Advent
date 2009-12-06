@@ -52,6 +52,7 @@ sub ReadInSiteConfig
       		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
       		$Site{'height'} = $csv_line->{'height'} ;
       		$Site{'width'} = $csv_line->{'width'} ;
+      		$Site{'copyright'} = $csv_line->{'copyright'} ;
       	}
    	close $csv_fh;
 #	print Dumper(%Site);
@@ -74,6 +75,7 @@ sub ReadInAdventConfigs
       		$Advent[$DayCount]{'alt'} = $csv_line->{'alt'} ;
       		$Advent[$DayCount]{'dayimagefile'} = $csv_line->{'dayimagefile'} ;
       		$Advent[$DayCount]{'daytextfile'} = $csv_line->{'daytextfile'} ;
+      		$Advent[$DayCount]{'copyright'} = $csv_line->{'copyright'} ;
 		$DayCount++;
       	}
    	close $csv_fh;
@@ -102,6 +104,8 @@ sub BuildAdventIndex
 	print ADVENTINDEX img {src=>"$$Site->{'imagefile'}",align=>'CENTER',
 		height=>"$$Site->{'height'}",width=>"$$Site->{'width'}",
 		style=>"position: absolute; top: 15px; left: 15px"};
+        print ADVENTINDEX h2({-style=>"Color: $$Site->{'titlefontcolour'};"},
+		"Copyright: $$Site->{'copyright'}");
 
 	print ADVENTINDEX "\n";
 
@@ -132,7 +136,12 @@ sub BuildIndividualAdvents
 
 	for my $days (@Advent)
 	{
-	unless ( defined($days->{'day'}) ) { die "incomplete day definition in days.csv\n"; }
+#	print Dumper($days);
+	unless ( ($days->{'day'}) ) 
+	{ 
+		print("incomplete day definition in days.csv\n");
+		next; 
+	}
 	my $AdventFile = $days->{'day'} . ".html";
 
 	open (ADVENT,"+>$AdventFile") or 
@@ -143,11 +152,13 @@ sub BuildIndividualAdvents
 	print ADVENT img {src=>"$days->{'dayimagefile'}",align=>'CENTER'};
 
 	print ADVENT "\n";
+        print ADVENT h2("Copyright: $days->{'copyright'}");
+	print ADVENT "\n";
 
 
 
 	open (ADVENTTXT,"<$days->{'daytextfile'}") or 
-		die "unable to write to file $days->{'daytextfile'}: $!";
+		die "unable to read from file $days->{'daytextfile'}: $!";
 	
    	while (<ADVENTTXT>)
       	{
