@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use CGI ':standard';
+use CGI (':standard', 'div');
 use Tie::Handle::CSV;
 use Getopt::Std;
 use Pod::Usage;
@@ -14,6 +14,24 @@ my $DestinationDir = "./advent";
 my $SiteConfigFile = "site.csv";
 my $DaysConfigFile = "days.csv";
 my $dir = "advent";
+
+my $Style = <<STYLE;
+<!-- 
+body 
+{
+	background: #000000; 
+	color: #ffffff; 
+	font: bold 12px arial;}
+a{ color: #0c0; }
+a:visited{ color: #400}
+div a{
+  position: absolute;
+  padding: 30px 5px 2px 45px;
+  border: 2px solid #448;
+  text-align:right;
+}
+-->
+STYLE
 
 #process the command line options
 getopts( 'i:hf:l:m:u:', \my %opt );    # parse user input
@@ -32,17 +50,16 @@ sub ReadInSiteConfig
       		$Site{'titlefontcolour'} = $csv_line->{'titlefontcolour'} ;
       		$Site{'background'} = $csv_line->{'background'} ;
       		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
+      		$Site{'height'} = $csv_line->{'height'} ;
+      		$Site{'width'} = $csv_line->{'width'} ;
       	}
    	close $csv_fh;
-	
 #	print Dumper(%Site);
-
 	return (\%Site);
 }
 
 sub ReadInAdventConfigs
 {
-
 	my @Advent;
  	my $csv_fh = Tie::Handle::CSV->new($DaysConfigFile, header => 1) 
 		or die "Cannot open $DaysConfigFile: $!\n";
@@ -68,28 +85,33 @@ sub BuildAdventIndex
 {
 
 	my $AdventIndexFile = shift;
+	my $Style = shift;
 	my $Site = shift;
 # 	print Dumper($Site);
-	my @Advent = shift;
+	my @Advent = @_;
 
 	open (ADVENTINDEX,"+>$AdventIndexFile") or 
 		die "unable to write to file $AdventIndexFile: $!";
 
-	#print ADVENTINDEX header;
         print ADVENTINDEX start_html(-title=>"$$Site->{'title'}",
-		-BGCOLOR=>"$$Site->{'background'}");
-        print ADVENTINDEX h1({color=>"$$Site->{'titlefontcolour'}" },"$$Site->{'title'}");
-	print ADVENTINDEX img {src=>$$Site->{'imagefile'},align=>'CENTER',
-		height=>'684', width=>"912"};
+		-BGCOLOR=>"$$Site->{'background'}",
+		-style=>{code=>$Style});
+        print ADVENTINDEX h1({-style=>"Color: $$Site->{'titlefontcolour'};
+		position: absolute; top: 25px; left: 45px; z-index:5"},
+		"$$Site->{'title'}");
+	print ADVENTINDEX img {src=>"$$Site->{'imagefile'}",align=>'CENTER',
+		height=>"$$Site->{'height'}",width=>"$$Site->{'width'}",
+		style=>"position: absolute; top: 15px; left: 15px"};
 
 	my $count;
 	for my $day (@Advent)
 	{
 		$count++;
 		print ADVENTINDEX br();
-		   print ADVENTINDEX a({-href=>"$count.html", 
-			-style=>"left: 580px; top: 430px; z-index:9"}, "$count");
-
+		   print ADVENTINDEX CGI::div( 
+			a({-href=>"$count.html", 
+			-style=>"left: 580px; top: 430px; z-index:9"}, "$count")
+			);
 	}
 
 	print ADVENTINDEX end_html; 
@@ -113,7 +135,7 @@ my $Site = ReadInSiteConfig(); #this actually returns a reference to a hash
 unless (-d $dir) { mkdir($dir) or die "cannot create $dir: $!"; }
 chdir($dir);
 
-BuildAdventIndex($AdventIndexFile,\$Site,@Advents);
+BuildAdventIndex($AdventIndexFile,$Style,\$Site,@Advents);
 
 
 
@@ -139,10 +161,10 @@ Takes two files; site.csv and days.csv with the following format;
 
 site.csv
 
-title,titlefontcolour,background,imagefile
+title,titlefontcolour,background,imagefile,height,width
 
 e.g.
-Advent calender,#ffffff,/advent2009/advent.png
+Advent calender,#ffffff,black,/advent2009/advent.png,765,368
 
 days.csv
 
