@@ -69,6 +69,13 @@ sub ReadInAdventConfigs
 
    	while (my $csv_line = <$csv_fh>)
       	{
+
+	unless ( ($csv_line->{'day'}) ) 
+		{ 
+			print("incomplete day definition in days.csv\n");
+			next; 
+		}	
+
       		$Advent[$DayCount]{'day'} = $csv_line->{'day'} ;
       		$Advent[$DayCount]{'left'} = $csv_line->{'left'} ;
       		$Advent[$DayCount]{'top'} = $csv_line->{'top'} ;
@@ -112,6 +119,12 @@ sub BuildAdventIndex
 	my $count;
 	for my $day (@Advent)
 	{
+
+		unless ( ($$day{'day'}) ) 
+			{ 
+				print("incomplete day definition in days.csv\n");
+				next; 
+			}	
 #		print Dumper($day);
 		$count++;
 		print ADVENTINDEX br();
@@ -223,6 +236,8 @@ day,left,top,alt,dayimagefile,daytextfile
 e.g.
 
 1,580,430,drummers busking,/advent2009/1.png,/advent2009/1.txt
+
+By omitting the 'day' entry, you can cause the script to ignore the line - its a way to allow you to build the file in situ, should you accrete the content over time
 
 note that the file locations are relative to the site - the script will create a advent subdir in the directory its run under, and create all the files there.  This then can be copied to a web directory of the same name eg.
 
