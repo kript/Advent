@@ -20,9 +20,9 @@ my $Style = <<STYLE;
 body 
 {
 	background: #000000; 
-	color: #ffffff; 
+	color: white; 
 	font: bold 12px arial;}
-a{ color: #0c0; }
+a{ color: white; }
 a:visited{ color: #400}
 div a{
   position: absolute;
@@ -97,7 +97,7 @@ sub BuildAdventIndex
 		-BGCOLOR=>"$$Site->{'background'}",
 		-style=>{code=>$Style});
         print ADVENTINDEX h1({-style=>"Color: $$Site->{'titlefontcolour'};
-		position: absolute; top: 25px; left: 45px; z-index:5"},
+		position: absolute; center: 25px; left: 250px; z-index:5"},
 		"$$Site->{'title'}");
 	print ADVENTINDEX img {src=>"$$Site->{'imagefile'}",align=>'CENTER',
 		height=>"$$Site->{'height'}",width=>"$$Site->{'width'}",
@@ -108,11 +108,12 @@ sub BuildAdventIndex
 	my $count;
 	for my $day (@Advent)
 	{
+#		print Dumper($day);
 		$count++;
 		print ADVENTINDEX br();
 		   print ADVENTINDEX CGI::div( 
 			a({-href=>"$count.html", 
-			-style=>"left: 580px; top: 430px; z-index:9"}, "$count")
+			-style=>"left: $$day{'left'}px; top: $$day{'top'}px; z-index:9"}, "$count")
 			);
 		print ADVENTINDEX "\n";
 	}
@@ -125,7 +126,42 @@ sub BuildAdventIndex
 
 sub BuildIndividualAdvents
 {
+	my @Advent = @_;
+# 	print Dumper(@Advent);
+	
 
+	for my $days (@Advent)
+	{
+	unless ( defined($days->{'day'}) ) { die "incomplete day definition in days.csv\n"; }
+	my $AdventFile = $days->{'day'} . ".html";
+
+	open (ADVENT,"+>$AdventFile") or 
+		die "unable to write to file $AdventFile: $!";
+
+        print ADVENT start_html(-title=>"$days->{'alt'}");
+        print ADVENT h1($days->{'alt'});
+	print ADVENT img {src=>"$days->{'dayimagefile'}",align=>'CENTER'};
+
+	print ADVENT "\n";
+
+
+
+	open (ADVENTTXT,"<$days->{'daytextfile'}") or 
+		die "unable to write to file $days->{'daytextfile'}: $!";
+	
+   	while (<ADVENTTXT>)
+      	{
+		print ADVENT $_;
+	}
+
+	close ADVENTTXT or 
+		die "unable to write to file $days->{'daytextfile'}: $!";
+	
+	print ADVENT "\n";
+	close ADVENT or 
+		die "unable to write to file $AdventFile: $!";
+	
+	}
 }
 
 #####main program control starts here
@@ -139,7 +175,7 @@ unless (-d $dir) { mkdir($dir) or die "cannot create $dir: $!"; }
 chdir($dir);
 
 BuildAdventIndex($AdventIndexFile,$Style,\$Site,@Advents);
-
+BuildIndividualAdvents(@Advents);
 
 
 

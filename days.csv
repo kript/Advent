@@ -1,7 +1,7 @@
-day,left,top,alt,dayimagefile
-1,100,200,alt,dayimagefile
-2,150,200,alt,dayimagefile
-3,200,200,alt,dayimagefile
-3,250,200,alt,dayimagefile
-5,300,200,alt,dayimagefile
-6,350,200,alt,dayimagefile
+day,left,top,alt,dayimagefile,daytextfile
+1,80,590,alt,1.jpg,1.txt
+2,170,590,alt,dayimagefile,2.txt
+3,260,590,alt,dayimagefile,3.txt
+3,350,590,alt,dayimagefile,4.txt
+5,440,590,alt,dayimagefile,5.txt
+6,530,590,alt,dayimagefile,6.txt
