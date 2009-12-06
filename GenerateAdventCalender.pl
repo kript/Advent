@@ -103,6 +103,8 @@ sub BuildAdventIndex
 		height=>"$$Site->{'height'}",width=>"$$Site->{'width'}",
 		style=>"position: absolute; top: 15px; left: 15px"};
 
+	print ADVENTINDEX "\n";
+
 	my $count;
 	for my $day (@Advent)
 	{
@@ -112,6 +114,7 @@ sub BuildAdventIndex
 			a({-href=>"$count.html", 
 			-style=>"left: 580px; top: 430px; z-index:9"}, "$count")
 			);
+		print ADVENTINDEX "\n";
 	}
 
 	print ADVENTINDEX end_html; 
