@@ -1,0 +1,11 @@
+image magik;
+http://www.imagemagick.org/Usage/resize/#percent
+http://www.imagemagick.org/Usage/annotating/
+
+convert to 1024 * 800 - roughly
+ convert anno_caption.jpg -resize 419200@ anno_caption-resampled.jpg 
+
+append copyright statement
+width=`identify -format %w 2009-06-04205653.jpg`
+convert -background '#0008' -fill white -gravity center -size ${width}x30 caption:"Copyright j constable" 2009-06-04205653.jpg +swap -gravity south -composite  anno_caption.jpg
+
