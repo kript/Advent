@@ -1,0 +1,6 @@
+ideas for Improvement;
+rss feed
+auto watermarking images with copyright info
+auto resizing images
+centering images in days html
+media plugin?
