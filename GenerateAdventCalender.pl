@@ -7,6 +7,7 @@ use Tie::Handle::CSV;
 use Getopt::Std;
 use Pod::Usage;
 use Data::Dumper;
+use Acme::ProgressBar;
 
 
 my $AdventIndexFile = "index.html";
@@ -146,7 +147,7 @@ sub BuildIndividualAdvents
 	my @Advent = @_;
 # 	print Dumper(@Advent);
 	
-
+progress {
 	for my $days (@Advent)
 	{
 #	print Dumper($days);
@@ -186,6 +187,7 @@ sub BuildIndividualAdvents
 		die "unable to write to file $AdventFile: $!";
 	
 	}
+}
 }
 
 #####main program control starts here
