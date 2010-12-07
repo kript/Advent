@@ -2,19 +2,18 @@
 
 use strict;
 use warnings;
-use CGI (':standard', 'div');
+use CGI ( ':standard', 'div' );
 use Tie::Handle::CSV;
 use Getopt::Std;
 use Pod::Usage;
 use Data::Dumper;
 use Acme::ProgressBar;
 
-
 my $AdventIndexFile = "index.html";
-my $DestinationDir = "./advent";
-my $SiteConfigFile = "site.csv";
-my $DaysConfigFile = "days.csv";
-my $dir = "advent";
+my $DestinationDir  = "./advent";
+my $SiteConfigFile  = "site.csv";
+my $DaysConfigFile  = "days.csv";
+my $dir             = "advent";
 
 my $Style = <<STYLE;
 <!-- 
@@ -38,173 +37,178 @@ STYLE
 getopts( 'i:hf:l:m:u:', \my %opt );    # parse user input
 pod2usage(1) if ( defined $opt{h} );
 
+sub ReadInSiteConfig {
+    my %Site;
+    my $csv_fh = Tie::Handle::CSV->new( $SiteConfigFile, header => 1 )
+      or die "Cannot open $SiteConfigFile: $!\n";
 
-sub ReadInSiteConfig
-{
-	my %Site;
- 	my $csv_fh = Tie::Handle::CSV->new($SiteConfigFile, header => 1) 
-		or die "Cannot open $SiteConfigFile: $!\n";
+    while ( my $csv_line = <$csv_fh> ) {
+        $Site{'title'}           = $csv_line->{'title'};
+        $Site{'titlefontcolour'} = $csv_line->{'titlefontcolour'};
+        $Site{'background'}      = $csv_line->{'background'};
+        $Site{'imagefile'}       = $csv_line->{'imagefile'};
+        $Site{'height'}          = $csv_line->{'height'};
+        $Site{'width'}           = $csv_line->{'width'};
+        $Site{'copyright'}       = $csv_line->{'copyright'};
+    }
+    close $csv_fh;
 
-   	while (my $csv_line = <$csv_fh>)
-      	{
-      		$Site{'title'} = $csv_line->{'title'} ;
-      		$Site{'titlefontcolour'} = $csv_line->{'titlefontcolour'} ;
-      		$Site{'background'} = $csv_line->{'background'} ;
-      		$Site{'imagefile'} = $csv_line->{'imagefile'} ;
-      		$Site{'height'} = $csv_line->{'height'} ;
-      		$Site{'width'} = $csv_line->{'width'} ;
-      		$Site{'copyright'} = $csv_line->{'copyright'} ;
-      	}
-   	close $csv_fh;
-#	print Dumper(%Site);
-	return (\%Site);
+    #	print Dumper(%Site);
+    return ( \%Site );
 }
 
-sub ReadInAdventConfigs
-{
-	my @Advent;
- 	my $csv_fh = Tie::Handle::CSV->new($DaysConfigFile, header => 1) 
-		or die "Cannot open $DaysConfigFile: $!\n";
+sub ReadInAdventConfigs {
+    my @Advent;
+    my $csv_fh = Tie::Handle::CSV->new( $DaysConfigFile, header => 1 )
+      or die "Cannot open $DaysConfigFile: $!\n";
 
-	my $DayCount = 0;
+    my $DayCount = 0;
 
-   	while (my $csv_line = <$csv_fh>)
-      	{
+    while ( my $csv_line = <$csv_fh> ) {
 
-	unless ( ($csv_line->{'day'}) ) 
-		{ 
-			print("incomplete day definition in days.csv\n");
-			next; 
-		}	
+        unless ( ( $csv_line->{'day'} ) ) {
+            print("incomplete day definition in days.csv\n");
+            next;
+        }
 
-      		$Advent[$DayCount]{'day'} = $csv_line->{'day'} ;
-      		$Advent[$DayCount]{'left'} = $csv_line->{'left'} ;
-      		$Advent[$DayCount]{'top'} = $csv_line->{'top'} ;
-      		$Advent[$DayCount]{'alt'} = $csv_line->{'alt'} ;
-      		$Advent[$DayCount]{'dayimagefile'} = $csv_line->{'dayimagefile'} ;
-      		$Advent[$DayCount]{'daytextfile'} = $csv_line->{'daytextfile'} ;
-      		$Advent[$DayCount]{'copyright'} = $csv_line->{'copyright'} ;
-		$DayCount++;
-      	}
-   	close $csv_fh;
-#	print Dumper(@Advent);
-	return (@Advent);
+        $Advent[$DayCount]{'day'}          = $csv_line->{'day'};
+        $Advent[$DayCount]{'left'}         = $csv_line->{'left'};
+        $Advent[$DayCount]{'top'}          = $csv_line->{'top'};
+        $Advent[$DayCount]{'alt'}          = $csv_line->{'alt'};
+        $Advent[$DayCount]{'dayimagefile'} = $csv_line->{'dayimagefile'};
+        $Advent[$DayCount]{'daytextfile'}  = $csv_line->{'daytextfile'};
+        $Advent[$DayCount]{'copyright'}    = $csv_line->{'copyright'};
+        $DayCount++;
+    }
+    close $csv_fh;
+
+    #	print Dumper(@Advent);
+    return (@Advent);
 }
 
-sub BuildAdventIndex
-{
+sub BuildAdventIndex {
 
-	my $AdventIndexFile = shift;
-	my $Style = shift;
-	my $Site = shift;
-# 	print Dumper($Site);
-	my @Advent = @_;
+    my $AdventIndexFile = shift;
+    my $Style           = shift;
+    my $Site            = shift;
 
-	open (ADVENTINDEX,"+>$AdventIndexFile") or 
-		die "unable to write to file $AdventIndexFile: $!";
+    # 	print Dumper($Site);
+    my @Advent = @_;
 
-        print ADVENTINDEX start_html(-title=>"$$Site->{'title'}",
-		-BGCOLOR=>"$$Site->{'background'}",
-		-style=>{code=>$Style});
-        print ADVENTINDEX h1({-style=>"Color: $$Site->{'titlefontcolour'};
-		position: absolute; center: 25px; left: 250px; z-index:5"},
-		"$$Site->{'title'}");
-	print ADVENTINDEX img {src=>"$$Site->{'imagefile'}",align=>'CENTER',
-		height=>"$$Site->{'height'}",width=>"$$Site->{'width'}",
-		style=>"position: absolute; top: 15px; left: 15px"};
-        print ADVENTINDEX h2({-style=>"Color: $$Site->{'titlefontcolour'};"},
-		"Copyright: $$Site->{'copyright'}");
+    open( ADVENTINDEX, "+>$AdventIndexFile" )
+      or die "unable to write to file $AdventIndexFile: $!";
 
-	print ADVENTINDEX "\n";
+    print ADVENTINDEX start_html(
+        -title   => "$$Site->{'title'}",
+        -BGCOLOR => "$$Site->{'background'}",
+        -style   => { code => $Style }
+    );
+    print ADVENTINDEX h1(
+        {
+            -style => "Color: $$Site->{'titlefontcolour'};
+		position: absolute; center: 25px; left: 250px; z-index:5"
+        },
+        "$$Site->{'title'}"
+    );
+    print ADVENTINDEX img {
+        src    => "$$Site->{'imagefile'}",
+        align  => 'CENTER',
+        height => "$$Site->{'height'}",
+        width  => "$$Site->{'width'}",
+        style  => "position: absolute; top: 15px; left: 15px"
+    };
+    print ADVENTINDEX h2( { -style => "Color: $$Site->{'titlefontcolour'};" },
+        "Copyright: $$Site->{'copyright'}" );
 
-	my $count;
-	for my $day (@Advent)
-	{
+    print ADVENTINDEX "\n";
 
-		unless ( ($$day{'day'}) ) 
-			{ 
-				print("incomplete day definition in days.csv\n");
-				next; 
-			}	
-#		print Dumper($day);
-		$count++;
-		print ADVENTINDEX br();
-		   print ADVENTINDEX CGI::div( 
-			a({-href=>"$count.html", 
-			-style=>"left: $$day{'left'}px; top: $$day{'top'}px; z-index:9"}, "$count")
-			);
-		print ADVENTINDEX "\n";
-	}
+    my $count;
+    for my $day (@Advent) {
 
-	print ADVENTINDEX end_html; 
+        unless ( ( $$day{'day'} ) ) {
+            print("incomplete day definition in days.csv\n");
+            next;
+        }
 
-	close ADVENTINDEX 
-		or die "cannot close $AdventIndexFile: $!";
+        #		print Dumper($day);
+        $count++;
+        print ADVENTINDEX br();
+        print ADVENTINDEX CGI::div(
+            a(
+                {
+                    -href => "$count.html",
+                    -style =>
+                      "left: $$day{'left'}px; top: $$day{'top'}px; z-index:9"
+                },
+                "$count"
+            )
+        );
+        print ADVENTINDEX "\n";
+    }
+
+    print ADVENTINDEX end_html;
+
+    close ADVENTINDEX
+      or die "cannot close $AdventIndexFile: $!";
 }
 
-sub BuildIndividualAdvents
-{
-	my @Advent = @_;
-# 	print Dumper(@Advent);
-	
-progress {
-	for my $days (@Advent)
-	{
-#	print Dumper($days);
-	unless ( ($days->{'day'}) ) 
-	{ 
-		print("incomplete day definition in days.csv\n");
-		next; 
-	}
-	my $AdventFile = $days->{'day'} . ".html";
+sub BuildIndividualAdvents {
+    my @Advent = @_;
 
-	open (ADVENT,"+>$AdventFile") or 
-		die "unable to write to file $AdventFile: $!";
+    # 	print Dumper(@Advent);
 
-        print ADVENT start_html(-title=>"$days->{'alt'}");
-        print ADVENT h1($days->{'alt'});
-	print ADVENT img {src=>"$days->{'dayimagefile'}",align=>'CENTER'};
+    progress {
+        for my $days (@Advent) {
 
-	print ADVENT "\n";
-        print ADVENT h2("Copyright: $days->{'copyright'}");
-	print ADVENT "\n";
+            #	print Dumper($days);
+            unless ( ( $days->{'day'} ) ) {
+                print("incomplete day definition in days.csv\n");
+                next;
+            }
+            my $AdventFile = $days->{'day'} . ".html";
 
+            open( ADVENT, "+>$AdventFile" )
+              or die "unable to write to file $AdventFile: $!";
 
+            print ADVENT start_html( -title => "$days->{'alt'}" );
+            print ADVENT h1( $days->{'alt'} );
+            print ADVENT img { src => "$days->{'dayimagefile'}",
+                align => 'CENTER' };
 
-	open (ADVENTTXT,"<$days->{'daytextfile'}") or 
-		die "unable to read from file $days->{'daytextfile'}: $!";
-	
-   	while (<ADVENTTXT>)
-      	{
-		print ADVENT $_;
-	}
+            print ADVENT "\n";
+            print ADVENT h2("Copyright: $days->{'copyright'}");
+            print ADVENT "\n";
 
-	close ADVENTTXT or 
-		die "unable to write to file $days->{'daytextfile'}: $!";
-	
-	print ADVENT "\n";
-	close ADVENT or 
-		die "unable to write to file $AdventFile: $!";
-	
-	}
-}
+            open( ADVENTTXT, "<$days->{'daytextfile'}" )
+              or die "unable to read from file $days->{'daytextfile'}: $!";
+
+            while (<ADVENTTXT>) {
+                print ADVENT $_;
+            }
+
+            close ADVENTTXT
+              or die "unable to write to file $days->{'daytextfile'}: $!";
+
+            print ADVENT "\n";
+            close ADVENT
+              or die "unable to write to file $AdventFile: $!";
+
+        }
+    }
 }
 
 #####main program control starts here
 
 my @Advents = ReadInAdventConfigs();
-my $Site = ReadInSiteConfig(); #this actually returns a reference to a hash
+my $Site    = ReadInSiteConfig();   #this actually returns a reference to a hash
 
 #print Dumper(@Advents);
 
-unless (-d $dir) { mkdir($dir) or die "cannot create $dir: $!"; }
+unless ( -d $dir ) { mkdir($dir) or die "cannot create $dir: $!"; }
 chdir($dir);
 
-BuildAdventIndex($AdventIndexFile,$Style,\$Site,@Advents);
+BuildAdventIndex( $AdventIndexFile, $Style, \$Site, @Advents );
 BuildIndividualAdvents(@Advents);
-
-
-
 
 =head1 GenerateAdventCalender.pl
 
