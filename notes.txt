@@ -9,4 +9,7 @@ append copyright statement
 width=`identify -format %w 2009-06-04205653.jpg`
 convert -background '#0008' -fill white -gravity center -size ${width}x30 caption:"Copyright j constable" 2009-06-04205653.jpg +swap -gravity south -composite  anno_caption.jpg
 
+rotate 90 to right
+convert -rotate 90 advent/DSC00111.JPG advent/DSC00111.JPG
+
 http://www.imagemagick.org/script/perl-magick.php
