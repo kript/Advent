@@ -259,7 +259,7 @@ There are no known bugs in this script.
 
 Please report problems to John Constable (John@kript.net)
 
-Patches are welcome. a git repository is forthcoming..
+Patches are welcome. a git repository is available at github
 
 =head1 LICENSE AND COPYRIGHT
 
