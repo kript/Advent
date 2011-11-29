@@ -280,6 +280,8 @@ test coverage?
 Generate an RSS feed
 generate an email when new content addded? WISHLIST
 checks that each csv file has the right number of fields, and error if not.
+centering images in days html
+media plugin embedded into HTML (learn HTML5?!)?
 
 
 
