@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+#outputs HTML version of a plain text file with HTML markup
 
 print "<p>\n";
 
