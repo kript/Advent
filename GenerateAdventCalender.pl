@@ -93,7 +93,7 @@ sub BuildAdventIndex {
     my $Site            = shift;
 
     # 	print Dumper($Site);
-    my @Advent = @_;
+    my @Advent = @_; #ASSUMES last variable passed - should CHECK this!
 
     open( ADVENTINDEX, "+>$AdventIndexFile" )
       or die "unable to write to file $AdventIndexFile: $!";
@@ -150,7 +150,7 @@ sub BuildAdventIndex {
 
     close ADVENTINDEX
       or die "cannot close $AdventIndexFile: $!";
-}
+}#end of sub BuildAdventIndex
 
 sub BuildIndividualAdvents {
     my @Advent = @_;
@@ -195,7 +195,7 @@ sub BuildIndividualAdvents {
 
         }
     }
-}
+} #end of sub BuildIndividualAdvents
 
 #####main program control starts here
 
@@ -212,46 +212,76 @@ BuildIndividualAdvents(@Advents);
 
 =head1 GenerateAdventCalender.pl
 
-Generate an advent calender page which has links to sub pages which contain images and text.
+Generate an advent calender image map page which has links to sub pages which contain 
+images and text.
 
 =head1 VERSION
 
-0.1
+0.2
 
 =head1 SYNOPSIS
 
-$0 
+Script to Generate an advent calender page which has links to sub pages which 
+contain images and text.
+Its built so the output can be copied up to a webserver, rather than having 
+to run dynamic code..
 
-Script to Generate an advent calender page which has links to sub pages which contain images and text.
 
 -h displays this page
 
-Takes two files; site.csv and days.csv with the following format;
+Takes two files; site.csv and days.csv with the following format (keep the headers);
 
 site.csv
 
-title,titlefontcolour,background,imagefile,height,width
+title,titlefontcolour,background,imagefile,height,width,copyright
 
 e.g.
-Advent calender,#ffffff,black,/advent2009/advent.png,765,368
+title,titlefontcolour,background,imagefile,height,width,copyright
+Advent calender,#ffffff,black,/advent2009/advent.png,765,368, J. Constable
 
 days.csv
 
-day,left,top,alt,dayimagefile,daytextfile
+day,left,top,alt,dayimagefile,daytextfile,copyright
 
 e.g.
+day,left,top,alt,dayimagefile,daytextfile,copyright
+1,580,430,drummers busking,/advent2009/1.png,/advent2009/1.txt,J.Constable
 
-1,580,430,drummers busking,/advent2009/1.png,/advent2009/1.txt
+By omitting the 'day' entry, you can cause the script to ignore the line - its 
+a way to allow you to build the file in situ, should you create the content beforehand.
 
-By omitting the 'day' entry, you can cause the script to ignore the line - its a way to allow you to build the file in situ, should you accrete the content over time
+note that the file locations are relative to the site - the script will create an
+advent subdir in the directory its run under, and create all the files there.  
 
-note that the file locations are relative to the site - the script will create a advent subdir in the directory its run under, and create all the files there.  This then can be copied to a web directory of the same name eg.
+This then can be copied to a web directory of the same name eg.
 
 script is run in /home/john/code/advent
 creates /home/john/code/advent/advent
 the content of which is then copies to advent2009/ on the webserver.
 
 this could be better, but.. 
+
+=head2 TODO
+
+use Getopt::Euclid for command line parsing
+clear up getopts or
+add command line options for directory
+change script to generate index.html files for each of the days cumulatives 
+	(index3.html contains days 1,2 & 3 for e.g.) so  a symlink can be made to the
+	days version with cron for e.g.
+incorporate imagemagick code to autorotate images and add copyright statements 
+	according to whats in the days file, putting new versions only in advent target dir
+switch to Template perl modle or similar
+re-implement in Dancer?
+change die and print statments to croak and warn
+change prints to say and other perl 5.10+ goodness
+add variable for advent index title placement values
+test coverage?
+Generate an RSS feed
+generate an email when new content addded? WISHLIST
+checks that each csv file has the right number of fields, and error if not.
+
+
 
 =head1 BUGS AND LIMITATIONS
 
