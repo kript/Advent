@@ -13,3 +13,9 @@ rotate 90 to right
 convert -rotate 90 advent/DSC00111.JPG advent/DSC00111.JPG
 
 http://www.imagemagick.org/script/perl-magick.php
+
+The simplest method is to create an animated GIF image. In the following example the argument of the -delay parameter is the time between frames expressed in 1/100th of second. The argument of -loop instead sets the number of repetitions of the sequence (zero means loop forever):
+
+convert -delay 50 -dispose Background +page Img*.png -loop 0 animation.gif
+
+http://personal.cscs.ch/~mvalle/postprocessing/ImageTools.htm
