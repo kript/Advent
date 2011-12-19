@@ -106,19 +106,22 @@ sub BuildAdventIndex {
     print ADVENTINDEX h1(
         {
             -style => "Color: $$Site->{'titlefontcolour'};
-		position: absolute; center: 25px; left: 250px; z-index:5"
+		position: absolute; center: 25px; left: 50px; z-index:5"
         },
         "$$Site->{'title'}"
     );
     print ADVENTINDEX img {
         src    => "$$Site->{'imagefile'}",
         align  => 'CENTER',
-        height => "$$Site->{'height'}",
-        width  => "$$Site->{'width'}",
+       # height => "$$Site->{'height'}",
+       # width  => "$$Site->{'width'}",
         style  => "position: absolute; top: 15px; left: 15px"
     };
     print ADVENTINDEX h2( { -style => "Color: $$Site->{'titlefontcolour'};" },
-        "Copyright: $$Site->{'copyright'}" );
+        "Copyright: $$Site->{'copyright'}", 
+        style  => "top: $$Site->{'height'}px; left: $$Site->{'width'}px"
+        
+        );
 
     print ADVENTINDEX "\n";
 
@@ -282,7 +285,8 @@ generate an email when new content addded? WISHLIST
 checks that each csv file has the right number of fields, and error if not.
 centering images in days html
 media plugin embedded into HTML (learn HTML5?!)?
-
+parameter to set the placement of the title to better fit the photo
+spell checking automation of the text files linked to in the says.csv file
 
 
 =head1 BUGS AND LIMITATIONS
