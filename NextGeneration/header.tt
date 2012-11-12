@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">    
+
+<head>
+	<meta charset="utf-8" />
+        <title>[% title %]</title>
+
+<style type="text/css">
+  body {
+          background: green;
+          color: red;
+	font-family: Univers, Calibri, "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	}
+
+  a{ color: white; }
+
+  div a{
+    position: absolute;
+    padding: 30px 5px 2px 45px;
+    border: 2px solid #448;
+    text-align: right;
+  }
+
+  h1 { 
+	font-size: 1.5em; 
+	font-weight: bold;	
+	text-align: center;
+	letter-spacing: 8px;
+	<!-- text-shadow: .2em .2em silver; -->
+  }
+
+  .copyright {
+	font-size: 0.5em;
+        font-weight: lighter;
+	color: blue;
+  }
+
+  img {
+	border: 3px solid yellow ;	
+  }
+
+</style>
+
+</head>
