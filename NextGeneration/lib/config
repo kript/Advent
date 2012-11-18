@@ -1,0 +1,2 @@
+[% USE pages = datafile('data/pages', delim = '|')     %]
+

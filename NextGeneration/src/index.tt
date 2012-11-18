@@ -1,0 +1,59 @@
+ 
+   [%  INCLUDE header.tt
+          title = 'Constable 2012 Advent Calendar!';
+    %]
+
+
+  <body>
+
+    
+<!--
+<div id="imagemap">
+	<img src="IMG_20121110_163519.jpg" alt="Grand Arcade Xmas Decorations">
+
+      [% FOR page IN pages %]
+		<a href="[% page.count %].html" 
+			[% IF page.alt %] src="[% page.alt %]" [% END %] 
+			style="left: [% page.left %]px; top: [% page.top %]px; z-index:9;"  >[% page.count %]
+		</a> 
+      	[% END %]
+-->
+
+<dl id="imagemap">
+	<dt>  
+    		<h1>Welcome to the 2012 Advent Calendar</h1>
+ 	</dt>
+
+      	[% FOR page IN pages %]
+		<dd id="[% page.count %]">
+  			<a id="linkblock" 
+				[% IF page.alt %] src="[% page.alt %]" [% END %]
+				title="[% page.title %]" 
+				href="[% page.count %].html">
+   				<span>
+    					[% page.count%]
+	   			</span>
+  			</a>
+ 		</dd>
+
+      	[% END %]
+</dl>
+
+<!--
+</div>
+-->
+
+
+<!--
+    <ol>
+      [% FOR page IN pages %]
+      	<li> 
+		<a href="[% page.url %]" [% IF page.alt %] src="[% page.alt %]" [% END %] >[% page.title %]
+		</a> 
+	</li>
+      [% END %]
+    </ol>
+-->
+
+[% INCLUDE footer.tt %]
+

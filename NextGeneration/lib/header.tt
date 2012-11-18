@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">    
+
+<head>
+	<meta charset="utf-8" />
+        <title>[% title %]</title>
+
+<style type="text/css">
+  body {
+        background: forestgreen;
+        color: firebrick;
+	font-family: Univers, Calibri, "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	}
+
+  a{ color: white; }
+
+  h1 { 
+	font-size: 1.5em; 
+	font-weight: bold;	
+	text-align: center;
+	letter-spacing: 8px;
+  }
+
+  .copyright {
+	font-size: 0.5em;
+        font-weight: lighter;
+	color: firebrick;
+	position: fixed;
+	bottom: 5px;
+  }
+
+  img {
+	border: 3px solid yellow ;	
+        background: forestgreen;
+	text-align: center;
+  }
+
+  a:hover {
+	color: maroon;
+	background-color: forestgreen;
+  }
+
+  #imagemap dd:hover {
+	color: maroon;
+	background-color: forestgreen;
+  }
+
+/* set the size of the definition list <dl> and add the background image */
+  #imagemap {
+  	<!-- display:block; -->
+  	width:1067px; 
+  	height:800px; 
+  	background:url(IMG_20121110_163519.jpg) no-repeat; 
+  	position:relative;
+  }
+
+  #imagemap dd {
+	position:absolute; 
+	padding: 15px 3px 1px 14px;
+	border: 1px dashed firebrick;
+	text-align: right;
+	font-size: .75em; 
+        font-weight: lighter;
+  }
+
+/* hopefully the clever stuff */
+[% FOR page IN pages %]
+
+	#imagemap #[% page.count %] {
+	  left:[% page.left %]px; 
+	  top:[% page.top %]px; 
+	  z-index:9;
+        font-weight: lighter;
+  }
+[% END %]
+
+</style>
+
+</head>
