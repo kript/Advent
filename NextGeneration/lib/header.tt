@@ -12,7 +12,9 @@
 	font-family: Univers, Calibri, "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	}
 
-  a{ color: white; }
+  a{ 
+	color: white; 
+  }
 
   h1 { 
 	font-size: 1.5em; 
@@ -29,11 +31,6 @@
 	bottom: 5px;
   }
 
-  img {
-	border: 3px solid yellow ;	
-        background: forestgreen;
-	text-align: center;
-  }
 
   a:hover {
 	color: maroon;
@@ -47,11 +44,15 @@
 
 /* set the size of the definition list <dl> and add the background image */
   #imagemap {
-  	<!-- display:block; -->
+  	display:block;
   	width:1067px; 
   	height:800px; 
   	background:url(IMG_20121110_163519.jpg) no-repeat; 
   	position:relative;
+	text-align: center;
+	border: 3px solid yellow ;	
+	margin-left: auto;
+    	margin-right: auto
   }
 
   #imagemap dd {

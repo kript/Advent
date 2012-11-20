@@ -7,8 +7,8 @@
 
 <style type="text/css">
   body {
-          background: green;
-          color: red;
+          background: forestgreen;
+          color: firebrick;
 	font-family: Univers, Calibri, "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
 	}
 
@@ -38,6 +38,16 @@
   img {
 	border: 3px solid yellow ;	
   }
+
+a:hover {
+color: maroon;
+background-color: forestgreen;
+}
+
+.centered {
+	text-align: center;
+}
+
 
 </style>
 

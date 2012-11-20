@@ -3,8 +3,8 @@
 
 file=$1
 copyr=$2
-width=`identify -format %w $file`
+width=`/usr/local/bin/identify -format %w $file`
 
-convert $1 -resize 419200@ $1
+/usr/local/bin/convert $1 -resize 419200@ $1
 
- convert -background '#0008' -fill white -gravity center -size ${width}x30 caption:"$copyr" $file +swap -gravity south -composite $file 
+/usr/local/bin/convert -background '#0008' -fill white -gravity center -size ${width}x30 caption:"$copyr" $file +swap -gravity south -composite $file 
