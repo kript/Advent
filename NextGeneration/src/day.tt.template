@@ -1,0 +1,56 @@
+[%  INCLUDE header.tt
+	title = 'Constable 2012 Advent Calendar!';
+%]
+
+
+<body>
+
+[% IF page.0.picturefile %] 
+<section>
+	<h2>Picture Of The Day</h2>
+	
+	<img 
+		src="[% page.0.picturefile %]"
+	</>
+
+</section>    
+[% END %]
+
+[% IF page.0.videourl %] 
+<section>
+	<h2>Video Of The Day</h2>
+
+	<video 
+		src="[% page.0.videourl %]"
+		width="640" height="480"
+		controls
+	</video>
+
+</section>    
+[% END %]
+
+[% IF page.0.audiourl %]
+<section>
+	<h2>Audio Of The Day</h2>
+
+	<audio controls preload="auto">
+		src="[% page.0.audiourl %]"
+	</audio>
+
+	<p>Download directly:</p> 
+	<ul>
+		<li>
+			<a href="[% page.audiourl %]">[% page.0.audiourl %]</a>
+		</li> 
+	</ul>
+
+</section>    
+[% END %]
+
+<section>
+	<h2>Addendum</h2>
+
+</section>    
+
+[% INCLUDE footer.tt %]
+
