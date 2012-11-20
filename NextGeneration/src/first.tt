@@ -1,0 +1,79 @@
+[%  INCLUDE header.tt
+	title = 'Constable 2012 Advent Calendar!';
+%]
+
+
+<body>
+
+[% FOR page IN pages %]
+
+	[% IF page.count == "first" %]
+
+		[% IF page.picturefile %] 
+			<section>
+				<h2>Picture Of The Day</h2>
+	
+					<img 
+						src="[% page.picturefile %]"
+					</>
+
+			</section>    
+		[% END %]
+
+		[% IF page.videourl %] 
+			<section>
+				<h2>Video Of The Day</h2>
+				<p> [% page.videodescription %] </p>
+				<video controls width="640" height="480" >
+					<source src="[% page.videourl %]" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+					[% IF page.videourlogg %]
+					<source src="[% page.videourlogg %]" type='video/ogg; codecs="theora, vorbis"'>
+					[% END %]
+				</video>
+
+			</section>    
+		[% END %]
+
+		[% IF page.audiourl %]
+			<section>
+				<h2>Audio Of The Day</h2>
+				<p> [% page.audiodescription %] </p>
+				
+
+				<audio controls preload="auto">
+					<source src="[% page.audiourl %]" type="audio/mp3">
+					[% IF page.audiourlogg %]
+					<source src="[% page.audiourlogg %]" type="audio/ogg">
+					[% END %]
+				</audio>
+
+				<p>Download directly:</p> 
+				<ul>
+					<li>
+						<a href="[% page.audiourl %]">[% page.audiodescription %] in mp3 format</a>
+					</li>
+					[% IF page.audiourlogg %]
+					<li>
+						<a href="[% page.audiourlogg %]">[% page.audiodescription %] in ogg format</a>
+					</li>
+					[% END %]
+ 
+				</ul>
+
+			</section>    
+		[% END %]
+
+		<section>
+			<h2>Addendum</h2>
+<p>
+Welcome to the first, new look, advent calendar. The site has been optimised for Firefox and Safari, but I think Internet Explorer will work OK as well.
+</p>
+		</section>    
+
+
+	[% END %]
+[% END %]
+
+
+[% INCLUDE footer.tt %]
+
