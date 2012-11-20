@@ -1,0 +1,2 @@
+* Add a HR tyle CSS rule to the Section tag to create HR for all days pages
+* Progamatically generate image dimensions from image file for CSS
