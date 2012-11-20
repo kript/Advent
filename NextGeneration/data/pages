@@ -1,3 +1,3 @@
-count | url | title | alt | left | top | picturefile | videourl | audiourl
-first | http://foo.org | First Day! | On the First day of Xmas, the calendar gave to me.. | 85 | 70 | P1000992.jpg | http://archive.org/download/santas-new-ride/santas-new-ride.mp4 | http://archive.org/download/christmasshortworks2011_1112_librivox/childsstory_dickens_bn_64kb.mp3
+count | url | title | alt | left | top | picturefile | videourl | videourlogg | audiourl | audiourlogg | videodescription | audiodescription
+first | http://foo.org | First Day! | On the First day of Xmas, the calendar gave to me.. | 85 | 70 | P1000992.jpg | http://archive.org/download/santas-new-ride/santas-new-ride.mp4 | http://archive.org/download/santas-new-ride/santas-new-ride.ogv  | http://archive.org/download/christmasshortworks2011_1112_librivox/childsstory_dickens_bn_64kb.mp3 | http://archive.org/download/christmasshortworks2011_1112_librivox/childsstory_dickens_bn.ogg | Fun little movie I found on Archive.org | 'A Childs Tale' By Charles Dickens
 second | http://bar.org | The Bar comittee | On the Second day of Xmas, the calendar gave to me.. | 165 | 70
